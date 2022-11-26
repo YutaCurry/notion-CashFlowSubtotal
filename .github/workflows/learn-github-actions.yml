@@ -11,3 +11,10 @@ jobs:
           node-version: '14'
       - run: npm install -g bats
       - run: bats -v
+      - name: secrets echo
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          FLOW_DB_ID: ${{ secrets.FLOW_DB_ID }}
+          ASSETS_DB_ID: ${{ secrets.ASSETS_DB_ID }}
+          TEMPLATE_DB_ID: ${{ secrets.TEMPLATE_DB_ID }}
+        run: echo $NOTION_TOKEN
