@@ -1,0 +1,22 @@
+name: tempadd-actions
+run-name: ${{ github.actor }} tempadd
+on:
+  workflow_dispatch:
+
+env:
+  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+  FLOW_DB_ID: ${{ secrets.FLOW_DB_ID }}
+  ASSETS_DB_ID: ${{ secrets.ASSETS_DB_ID }}
+  TEMPLATE_DB_ID: ${{ secrets.TEMPLATE_DB_ID }}
+
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: npm install
+      - name: exec-step
+        run: npm run tempAdd
