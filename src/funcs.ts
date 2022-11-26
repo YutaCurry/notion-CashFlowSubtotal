@@ -11,7 +11,7 @@ const ASSETS_DB_ID = process.env.ASSETS_DB_ID as string
 const TEMPLATE_DB_ID = process.env.TEMPLATE_DB_ID as string
 
 
-async function assetsTotal() {
+export async function assetsTotal() {
 
   // assets database
   const assetRes = await notion.databases.query({
@@ -27,7 +27,6 @@ async function assetsTotal() {
     return pre + 0
   }, 0)
   
-  console.log({assestsTotal})
   return assestsTotal
 }
 
@@ -48,10 +47,9 @@ async function flowSortByNameCurrency() {
   return records
 }
 
-async function assetsSubTotal() {
+export async function assetsSubTotal() {
 
   const assTotal = await assetsTotal()
-  console.log({assTotal})
   
   const flows = await flowSortByNameCurrency()
   
@@ -77,7 +75,6 @@ async function assetsSubTotal() {
   // 更新処理
   await Promise.all(flows.map(async (e) => {
 
-    console.log({properties: e.properties})
     const res = await notion.pages.update({
       page_id: e.id,
       properties: {'累計金額': {...e.properties['累計金額']}},
@@ -89,7 +86,7 @@ async function assetsSubTotal() {
 /**
  * テンプレート追加
  */
-async function templateAdd() {
+export async function templateAdd() {
 
   const flow = await flowSortByNameCurrency()
   const [tail,] = flow.reverse()
@@ -170,20 +167,3 @@ async function templateAdd() {
   }
 }
 
-async function main() {
-
-  console.log('templateAdd ======')
-  await templateAdd()
-
-  console.log('assetsSubTotal ======')
-  await assetsSubTotal()
-
-  console.log('end ======')
-}
-
-main()
-  .then(() => process.exit(0))
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
