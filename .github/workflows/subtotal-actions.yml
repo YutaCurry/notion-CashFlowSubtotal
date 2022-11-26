@@ -6,6 +6,7 @@ on:
     # 5時、9時、12時、15時、18時、21時に実行
     - cron: '0 5,9,12,15,18,21 * * *'
     # - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 env:
   NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
