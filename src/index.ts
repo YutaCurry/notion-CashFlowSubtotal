@@ -175,8 +175,8 @@ async function main() {
   console.log('templateAdd ======')
   await templateAdd()
 
-  // console.log('assetsSubTotal ======')
-  // await assetsSubTotal()
+  console.log('assetsSubTotal ======')
+  await assetsSubTotal()
 
   console.log('end ======')
 }
