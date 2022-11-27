@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "subtotal": "ts-node src/subTotal.ts",
     "tempAdd": "ts-node src/tempAdd.ts",
+    "alertIndex": "ts-node src/alertIndexBox.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
     "format": "prettier --write src/**/*.ts"
@@ -17,7 +18,8 @@
   "dependencies": {
     "@notionhq/client": "^2.2.2",
     "date-fns": "^2.29.3",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "line-notify": "github:YutaCurry/line-notify"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

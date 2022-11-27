@@ -3,6 +3,7 @@ import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { notion } from "./client";
 import dotenv from "dotenv";
 import { format, getDate } from "date-fns";
+import { lineNotify } from "line-notify";
 
 dotenv.config()
 
@@ -167,3 +168,14 @@ export async function templateAdd() {
   }
 }
 
+export async function alertIndexBox() {
+
+  // タスク一覧取得 Status==Index and EditDate が現在日時で1日に入っているもの
+  // Line通知
+  const res = await lineNotify('test message', process.env.LINE_NOTIFY_TOKEN as string)
+  if (res.status !== 200) {
+    console.log('line通知に失敗しました。', {res})
+    return
+  }
+  console.log('成功しました。')
+}
