@@ -1,5 +1,5 @@
-name: subtotal-actions
-run-name: ${{ github.actor }} subtotal
+name: alertIndex-actions
+run-name: ${{ github.actor }} alertIndex
 on:
   # [push]
   schedule:
