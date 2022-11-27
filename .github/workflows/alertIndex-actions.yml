@@ -1,0 +1,27 @@
+name: subtotal-actions
+run-name: ${{ github.actor }} subtotal
+on:
+  # [push]
+  schedule:
+    # 7時、21時に実行
+    - cron: '0 7,21 * * *'
+  workflow_dispatch:
+
+env:
+  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+  FLOW_DB_ID: ${{ secrets.FLOW_DB_ID }}
+  ASSETS_DB_ID: ${{ secrets.ASSETS_DB_ID }}
+  TEMPLATE_DB_ID: ${{ secrets.TEMPLATE_DB_ID }}
+  TASK_DB_ID: ${{ secrets.TASK_DB_ID }}
+  LINE_NOTIFY_TOKEN: ${{ secrets.LINE_NOTIFY_TOKEN }}
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: npm install
+      - name: exec-step
+        run: npm run alertIndex

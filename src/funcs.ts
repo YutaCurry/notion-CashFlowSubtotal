@@ -2,7 +2,7 @@ import { Client, isFullPage } from "@notionhq/client";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { notion } from "./client";
 import dotenv from "dotenv";
-import { format, getDate } from "date-fns";
+import { format, getDate, subDays } from "date-fns";
 import { lineNotify } from "line-notify";
 
 dotenv.config()
@@ -10,6 +10,7 @@ dotenv.config()
 const FLOW_DB_ID = process.env.FLOW_DB_ID as string
 const ASSETS_DB_ID = process.env.ASSETS_DB_ID as string
 const TEMPLATE_DB_ID = process.env.TEMPLATE_DB_ID as string
+const TASK_DB_ID = process.env.TASK_DB_ID as string
 
 
 export async function assetsTotal() {
@@ -168,11 +169,62 @@ export async function templateAdd() {
   }
 }
 
+
+async function getYesterdayBeyondTask () {
+
+  const yesterday = subDays(new Date(), 1)
+  const beyondTask = await notion.databases.query({
+    database_id: TASK_DB_ID,
+    filter: {
+      and: [
+        {
+          property: "Done",
+          checkbox: {
+            equals: false
+          }
+        },
+        {
+          property: "Status",
+          status: {
+            equals: "Inbox",
+          }
+        },
+        {
+          property: "InputDate",
+          date: {
+            before: format(yesterday, 'yyyy-MM-dd HH:mm:ss'),
+          }
+        },
+      ],
+    }
+  })
+  return beyondTask.results.filter(isFullPage)
+}
+
 export async function alertIndexBox() {
 
   // タスク一覧取得 Status==Index and EditDate が現在日時で1日に入っているもの
+  const tasks = await getYesterdayBeyondTask()
+  const taskNames = tasks.map(e => {
+    const task = e.properties["タスク"]
+    if (task.type !== 'title') {
+      return null
+    }
+    if (task.title.length === 0) {
+      return null
+    }
+    return task.title[0].plain_text
+  }).filter((e): e is NonNullable<typeof e> => e !== null)
+  if (taskNames.length === 0) {
+    console.log('Inboxにあるタスクはありません。')
+    return
+  }
+
+  console.log({taskNames})
+  const message = `\n【Inboxから振り分け下さい】\n\n${taskNames.length > 0 && `・${taskNames.join('\n・')}`}`
+
   // Line通知
-  const res = await lineNotify('test message', process.env.LINE_NOTIFY_TOKEN as string)
+  const res = await lineNotify(message, process.env.LINE_NOTIFY_TOKEN as string)
   if (res.status !== 200) {
     console.log('line通知に失敗しました。', {res})
     return
