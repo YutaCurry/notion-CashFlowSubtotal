@@ -16,7 +16,7 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "@notionhq/client": "^2.2.2",
+    "@notionhq/client": "^2.2.3",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",
     "line-notify": "github:YutaCurry/line-notify"
