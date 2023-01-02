@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.18",
     "prettier": "^2.8.0",
     "rome": "^10.0.1",
     "ts-node": "^10.9.1",
